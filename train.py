@@ -4,31 +4,14 @@ import argparse
 from torch.utils.data import DataLoader
 from data_loader import MyDataset
 import matplotlib as plt
-
+from torch.nn import MSELoss
 
 parser = argparse.ArgumentParser(description='denoise ')
-
 parser.add_argument('--cuda', action='store_true', help='Choose device to use cpu cuda:0')
-parser.add_argument('--train_root', action='store', type=str,
-                        default='/home/yusha/yusha/cavitation2017/process_data/SplitSoundData/four1/TrainSpec', help='Root path of image')
-parser.add_argument('--train_label_path', action='store', type=str,
-                        default='/home/yusha/yusha/cavitation2017/process_data/SplitSoundData/four1/Label/train_split_label.csv', help='label file path')
-
-parser.add_argument('--test_root', action='store', type=str,
-                        default='/home/yusha/yusha/cavitation2017/process_data/SplitSoundData/four1/TestSpec', help='Root path of image')
-parser.add_argument('--test_label_path', action='store', type=str,
-                        default='/home/yusha/yusha/cavitation2017/process_data/SplitSoundData/four1/Label/test_split_label.csv', help='label file path')
-# parser.add_argument('--train_root', action='store', type=str,
-#                         default='./traindata', help='Root path of image')
-# parser.add_argument('--train_label_path', action='store', type=str,
-#                         default='trainlabel.csv', help='label file path')
-
-# parser.add_argument('--test_root', action='store', type=str,
-#                         default='./testdata', help='Root path of image')
-# parser.add_argument('--test_label_path', action='store', type=str,
-#                         default='testlabel.csv', help='label file path')
-
-
+parser.add_argument('--train_file', action='store', type=str,
+                        default='train.txxt', help='Root path of image')
+parser.add_argument('--test_file', action='store', type=str,
+                        default='test.txt', help='Root path of image')
 parser.add_argument('--batch_size', action='store', type=int,
                         default=8, help='number of data in a batch')
 parser.add_argument('--lr', action='store', type=float,
@@ -62,7 +45,7 @@ def train(opts):
     #                                                gamma=0.1)
     # lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,milestones=[50,100,150,200,250,300],gamma=0.1)
     weights = torch.FloatTensor([6,2,5,1]).to(device)
-    loss_fct = CrossEntropyLoss(weight=weights)   #
+    loss_fct = MSELoss()   #
     print("Model's state_dict:")
     for param_tensor in model.state_dict():
         print(param_tensor, "\t", model.state_dict()[param_tensor].size())
