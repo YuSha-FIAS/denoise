@@ -42,8 +42,8 @@ def train(opts):
     print(device)
     # load dataset
     
-    dataset_train = TrainFFTDataset(opts)
-    dataset_test = TestFFTDataset(opts)
+    dataset_train = MyDataset('train.txt')
+    dataset_test = MyDataset('test.txt')
     # define training and validation data loaders
     data_loader_train = torch.utils.data.DataLoader(
         dataset_train, batch_size=opts.batch_size, shuffle=True, num_workers=1)
@@ -52,26 +52,11 @@ def train(opts):
         dataset_test, batch_size=opts.batch_size, shuffle=False, num_workers=1)
 
 
-    # get the model
-    model = resnet18(opts)
-    # model = resnet34(opts)
-    # model = resnet50(opts)
-    # model = resnet101(opts)
-    # model = resnet152(opts)
-    model = resnext101_32x8d(opts)
-    # model = resnext50_32x4d(opts)
-    # if torch.cuda.device_count() > 1:
-    # print("Let's use", torch.cuda.device_count(), "GPUs!")
+    model = Net()
     # model = nn.DataParallel(model)
     model.to(device)
-
-    # construct an optimizer
-    # params = [p for p in model.parameters() if p.requires_grad]
-    # TODO Adam Adamax RMSprop Nadam
     optimizer = torch.optim.Adam(model.parameters(),lr=opts.lr,betas=(0.9,0.99))
     # optimizer = torch.optim.Adamax(model.parameters(),lr=opts.lr,betas=(0.9,0.999),eps=1e-8,weight_decay=0.1)
-    # and a learning rate scheduler
-    # TODO LambdaLR MultiStepLR
     # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
     #                                                step_size=50,
     #                                                gamma=0.1)
