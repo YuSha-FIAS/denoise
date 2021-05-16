@@ -11,4 +11,5 @@
 .\data\noise\2.jpg .\data\label\2.jpg 
 
 ······
+
 两个路径中间一个空格
