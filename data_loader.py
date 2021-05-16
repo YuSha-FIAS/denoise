@@ -11,13 +11,13 @@ import numpy as np
 import torch.optim as optim
 import os
 # torch.cuda.set_device(gpu_id)#使用GPU
-
+import torchvision
 def default_loader(path):
     return Image.open(path).convert('RGB')
 
 
 class MyDataset(Dataset):
-    def __init__(self, txt, transform=None, target_transform=None, loader=default_loader):
+    def __init__(self, txt, transform=torchvision.transforms.ToTensor(), target_transform=None, loader=default_loader):
         super(MyDataset, self).__init__()
         fh = open(txt, 'r')
         imgs = []
